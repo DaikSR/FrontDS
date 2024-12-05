@@ -48,7 +48,9 @@ export function ModalUpdateUser({ open, setOpen }) {
   useEffect(() => {
     setNombre_completo(userData?.nombre_completo);
     setCorreo(userData?.correo);
-  }, []);
+  }, [userData]);
+
+  console.log(userData);
 
   if (userData) {
     return (
