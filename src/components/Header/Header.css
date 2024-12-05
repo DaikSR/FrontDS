@@ -4,9 +4,12 @@
     padding: 0.5rem; /* Reduce el padding para achicar el fondo rosa */
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    /* position: sticky; */
+    /* top: 0; */
+    display: flex ;
+    justify-content: center !important;
+    align-items: center;
+    /* z-index: 1000; */
   }
   
   /* Contenedor del contenido del Header */
@@ -84,3 +87,15 @@
     font-size: 18px;
   }
   
+
+  .item-link{
+    border:1px solid gray;
+    padding:10px;
+    border-radius:5px;
+
+  }
+
+  .content-items{
+    display: flex;
+    align-items: center;
+  }
