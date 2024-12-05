@@ -5,6 +5,8 @@ import { BASE_API } from "../../contants/api.constant";
 import axios from "axios";
 import { useValidateSession } from "../../hooks/validate-session";
 import { ButtonEdit } from "../../components/button-edit";
+import { UseAuthMe } from "../../hooks/auth-me";
+import { ModalCreateProduct } from "../../components/modal-create-product";
 
 const productos = [
   {
@@ -164,46 +166,64 @@ const Productos = () => {
     }
   }
 
-  return (
-    <div className="productos-container">
-      <h2 className="productos-titulo">Productos</h2>
-      <div className="productos-grid">
-        {productos.map((producto) => (
-          <div key={producto.id} className="producto-card">
-            <Link to={`/producto/${producto.id}`}>
-              <img
-                src={producto.image}
-                alt={producto.titulo}
-                className="producto-imagen"
-                onMouseEnter={() => handleMouseEnter(producto.id)}
-                onMouseLeave={() => handleMouseLeave(producto.id)}
-              />
-            </Link>
-            <h3 className="producto-titulo">{producto.titulo}</h3>
-            <p className="producto-precio">{producto.precio}</p>
+  const { userData } = UseAuthMe();
 
-            {useValidateSession() && (
-              <button
-                type="button"
-                onClick={() => handleSelectForCart(producto)}
-                style={{
-                  cursor: "pointer",
-                  backgroundColor: "red",
-                  color: "white",
-                  borderRadius: "8px",
-                  border: "none",
-                  paddingBlock: "4px",
-                }}
-              >
-                Agregar al carrito
+  const [openModalCreate, setOpenModalCreate] = useState(false);
+
+  if (userData) {
+    return (
+      <div className="productos-container">
+        <h2 className="productos-titulo">Productos</h2>
+        <div className="productos-grid">
+          {productos.map((producto) => (
+            <div key={producto.id} className="producto-card">
+              <Link to={`/producto/${producto.id}`}>
+                <img
+                  src={producto.image}
+                  alt={producto.titulo}
+                  className="producto-imagen"
+                  onMouseEnter={() => handleMouseEnter(producto.id)}
+                  onMouseLeave={() => handleMouseLeave(producto.id)}
+                />
+              </Link>
+              <h3 className="producto-titulo">{producto.titulo}</h3>
+              <p className="producto-precio">{producto.precio}</p>
+
+              {useValidateSession() && (
+                <button
+                  type="button"
+                  onClick={() => handleSelectForCart(producto)}
+                  style={{
+                    cursor: "pointer",
+                    backgroundColor: "red",
+                    color: "white",
+                    borderRadius: "8px",
+                    border: "none",
+                    paddingBlock: "4px",
+                  }}
+                >
+                  Agregar al carrito
+                </button>
+              )}
+              <ButtonEdit productSelected={producto}></ButtonEdit>
+            </div>
+          ))}
+          {userData?.role === "admin" && (
+            <div>
+              <button className="" onClick={() => setOpenModalCreate(true)}>
+                Agregar producto
               </button>
-            )}
-            <ButtonEdit productSelected={producto}></ButtonEdit>
-          </div>
-        ))}
+            </div>
+          )}
+        </div>
+
+        <ModalCreateProduct
+          open={openModalCreate}
+          setOpen={setOpenModalCreate}
+        />
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default Productos;
